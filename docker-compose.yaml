@@ -1,0 +1,29 @@
+version: '3.9'
+services:
+  envoy:
+    image: envoyproxy/envoy:v1.27-latest
+    container_name: my-envoy-app
+    ports:
+    - '80:80'
+    volumes:
+    - ./envoy-apache.yaml:/etc/envoy/envoy.yaml
+    - ./json.lua:/etc/envoy/json.lua
+    # - ./envoy-access.log:/var/log/envoy/access.log
+  apache:
+    image: httpd:latest
+    container_name: my-apache-app
+    # ports:
+    # - '80:80'
+    volumes:
+    - ./apache/website:/usr/local/apache2/htdocs/website
+    - ./apache/httpd.conf:/usr/local/apache2/conf/httpd.conf
+    - ./apache/sites/a.com:/usr/local/apache2/htdocs/a.com
+    - ./apache/sites/b.com:/usr/local/apache2/htdocs/b.com
+  nginx:
+    image: nginx:latest
+    container_name: my-nginx-app
+    # ports:
+    # - '81:80'
+    volumes:
+    - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    - ./nginx/index.html:/var/www/html/index.html
